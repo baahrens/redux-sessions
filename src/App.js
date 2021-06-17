@@ -1,24 +1,28 @@
-import logo from './logo.svg';
+import { Provider, useSelector } from 'react-redux'
+import TodoList from './TodoList'
+import store from './store'
 import './App.css';
+
+const Sidebar = () => {
+  const todos = useSelector(state => state.todos)
+
+  return (
+    <ul className="sidebar">
+      <li>Todos {todos.length}</li>
+      <li>Irgendwas anderes</li>
+      <li>Noch was</li>
+    </ul>
+  )
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <Sidebar />
+        <TodoList />
+      </div>
+    </Provider>
   );
 }
 
