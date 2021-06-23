@@ -1,6 +1,18 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
+// action creators                  Action
+const addTodoAction = inputValue => ({ type: 'ADD_TODO', payload: inputValue })
+const notificationAction = text => ({ type: 'NOTIFICATION', payload: `Removed "${text}"` })
+
+const removeTodoAction = todo => {
+  return dispatch => {
+    dispatch({ type: 'REMOVE_TODO', payload: todo })
+    dispatch(notificationAction(todo))
+  }
+}
+
+
 const TodoList = () => {
   const todos2 = useSelector(state => state.todos)
   const dispatch = useDispatch()
@@ -8,7 +20,7 @@ const TodoList = () => {
   const [inputValue, setInputValue] = React.useState("")
 
   const addTodo = () => {
-    dispatch({ type: 'ADD_TODO', payload: inputValue })
+    dispatch(addTodoAction(inputValue))
     setInputValue('')
   }
 
@@ -16,7 +28,7 @@ const TodoList = () => {
   const handleInputChange = event => setInputValue(event.target.value)
 
   const removeTodo = todo => {
-    dispatch({ type: 'REMOVE_TODO', payload: todo })
+    dispatch(removeTodoAction(todo))
   }
 
   return (

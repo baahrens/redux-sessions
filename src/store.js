@@ -1,4 +1,5 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 
 const initialState = {
   todos: [
@@ -9,6 +10,10 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
+  if (action.type === 'NOTIFICATION') {
+    console.log(action.payload)
+  }
+
   if (action.type === 'ADD_TODO') {
     return {
       ...state,
@@ -26,6 +31,17 @@ const reducer = (state = initialState, action) => {
   return state
 }
 
-const store = createStore(reducer)
+const loggingMiddleware = store => next => action => {
+  console.dir(store.getState())
+  console.log(`${action.type} with payload "${action.payload}`)
+
+  next(action)
+
+  console.dir(store.getState())
+}
+
+const middleware = [thunk, loggingMiddleware]
+
+const store = createStore(reducer, applyMiddleware(...middleware))
 
 export default store
